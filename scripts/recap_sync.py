@@ -25,14 +25,16 @@ from urllib.parse import urlsplit, urlunsplit
 DEFAULT_MARKET = "CN-A"
 
 
-def run_cmd(args: List[str], cwd: Path | None = None) -> subprocess.CompletedProcess:
+def run_cmd(
+    args: List[str], cwd: Path | None = None, check: bool = True
+) -> subprocess.CompletedProcess:
     return subprocess.run(
         args,
         cwd=str(cwd) if cwd else None,
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        check=True,
+        check=check,
     )
 
 
@@ -309,12 +311,37 @@ def with_token_if_needed(repo_url: str, token: str | None) -> str:
 
 def ensure_repo(repo_dir: Path, repo_url: str, branch: str) -> None:
     if (repo_dir / ".git").exists():
-        run_cmd(["git", "fetch", "origin"], cwd=repo_dir)
-        run_cmd(["git", "checkout", branch], cwd=repo_dir)
-        run_cmd(["git", "pull", "origin", branch], cwd=repo_dir)
+        run_cmd(["git", "remote", "set-url", "origin", repo_url], cwd=repo_dir)
+        run_cmd(["git", "fetch", "origin"], cwd=repo_dir, check=False)
+
+        checkout = run_cmd(["git", "checkout", branch], cwd=repo_dir, check=False)
+        if checkout.returncode != 0:
+            run_cmd(["git", "checkout", "-b", branch], cwd=repo_dir)
+
+        pull = run_cmd(["git", "pull", "origin", branch], cwd=repo_dir, check=False)
+        if pull.returncode != 0:
+            stderr = (pull.stderr or "").lower()
+            if "couldn't find remote ref" not in stderr and "no such ref was fetched" not in stderr:
+                raise RuntimeError(pull.stderr.strip() or "git pull failed")
         return
+
     ensure_dir(repo_dir.parent)
-    run_cmd(["git", "clone", "--branch", branch, repo_url, str(repo_dir)])
+    clone = run_cmd(
+        ["git", "clone", "--branch", branch, repo_url, str(repo_dir)],
+        check=False,
+    )
+    if clone.returncode == 0:
+        return
+
+    stderr = (clone.stderr or "").lower()
+    if "remote branch" in stderr and "not found" in stderr:
+        if repo_dir.exists():
+            shutil.rmtree(repo_dir)
+        ensure_dir(repo_dir)
+        run_cmd(["git", "init", "-b", branch], cwd=repo_dir)
+        run_cmd(["git", "remote", "add", "origin", repo_url], cwd=repo_dir)
+        return
+    raise RuntimeError(clone.stderr.strip() or "git clone failed")
 
 
 def load_json_if_exists(path: Path, fallback: Any) -> Any:

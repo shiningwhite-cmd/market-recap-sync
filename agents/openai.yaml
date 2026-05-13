@@ -1,0 +1,4 @@
+interface:
+  display_name: "Market Memory Sync"
+  short_description: "Ingest and recall long-term market memory on GitHub"
+  default_prompt: "Use $market-recap-sync to ingest post-market recap into GitHub memory and recall historical memory windows for pre-market prediction support."

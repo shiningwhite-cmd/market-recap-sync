@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Market Memory Canonical Schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "date",
+    "market",
+    "summary",
+    "themes",
+    "performance",
+    "watchlist",
+    "risks",
+    "actions",
+    "next_day_plan"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Data schema version, e.g. 2.0"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "market": {
+      "type": "string",
+      "description": "例如 CN-A, US, HK"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "themes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "performance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": [
+              "number",
+              "string"
+            ]
+          },
+          "unit": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "watchlist": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "symbol",
+          "thesis"
+        ],
+        "properties": {
+          "symbol": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "thesis": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "string"
+          },
+          "risk": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_day_plan": {
+      "type": "object",
+      "required": [
+        "bias",
+        "focus",
+        "avoid",
+        "key_levels",
+        "notes"
+      ],
+      "properties": {
+        "bias": {
+          "type": "string",
+          "enum": [
+            "bullish",
+            "neutral",
+            "bearish"
+          ]
+        },
+        "focus": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "avoid": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "key_levels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "metrics": {
+      "type": "object"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "meta": {
+      "type": "object"
+    }
+  }
+}

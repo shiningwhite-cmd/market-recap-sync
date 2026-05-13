@@ -1,0 +1,4 @@
+interface:
+  display_name: "Market Recap Sync"
+  short_description: "Normalize recap data and auto-sync to GitHub"
+  default_prompt: "Use $market-recap-sync to convert daily recap inputs into markdown plus JSON/CSV artifacts and push updates to the configured GitHub repo."

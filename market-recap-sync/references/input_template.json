@@ -1,0 +1,48 @@
+{
+  "date": "2026-05-13",
+  "market": "CN-A",
+  "summary": "指数震荡，资金围绕 AI 算力与电力设备切换，尾盘风险偏好回落。",
+  "themes": [
+    "AI算力",
+    "电力设备",
+    "高股息"
+  ],
+  "performance": [
+    {
+      "name": "沪深300",
+      "value": 1.2,
+      "unit": "%",
+      "note": "日内反弹"
+    },
+    {
+      "name": "全市场成交额",
+      "value": 10234,
+      "unit": "亿元"
+    }
+  ],
+  "watchlist": [
+    {
+      "symbol": "600000.SH",
+      "name": "示例公司A",
+      "thesis": "估值修复 + 业绩催化",
+      "trigger": "站稳20日线且量能放大",
+      "risk": "政策扰动"
+    }
+  ],
+  "risks": [
+    "外围市场波动加大",
+    "高位板块分歧"
+  ],
+  "actions": [
+    "降低追高仓位",
+    "关注回调后的主线承接"
+  ],
+  "tags": [
+    "daily",
+    "strategy"
+  ],
+  "meta": {
+    "author": "analyst-1",
+    "source": "internal-review-system"
+  }
+}

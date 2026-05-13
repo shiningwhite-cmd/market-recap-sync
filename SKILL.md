@@ -147,4 +147,31 @@ memory/
 
 - 旧脚本 `scripts/recap_sync.py` 仍可用（偏“日报产物同步”）。
 - 新脚本 `scripts/memory_sync.py` 用于“长期记忆读写系统”。
-- 若希望统一迁移，可将历史 `recaps/YYYY/.../recap.json` 批量转换后 `ingest` 入库。
+- 若希望统一迁移，使用 `scripts/migrate_recaps_to_memory.py` 将历史 `recaps/YYYY/.../recap.json` 批量迁移到 `memory/`。
+
+## 历史迁移（Legacy -> Memory）
+
+先预览迁移计划（不写入）：  
+
+```bash
+python3 scripts/migrate_recaps_to_memory.py \
+  --source-root /path/to/legacy_repo \
+  --recaps-dir recaps \
+  --dry-run
+```
+
+执行正式迁移（自动 commit + push）：  
+
+```bash
+python3 scripts/migrate_recaps_to_memory.py \
+  --source-root /path/to/legacy_repo \
+  --recaps-dir recaps
+```
+
+常用迁移控制参数：
+
+- `--from-date 2025-01-01 --to-date 2025-12-31`：按日期窗口迁移
+- `--market CN-A`：只迁移指定市场
+- `--themes AI算力,电力设备`：只迁移包含指定主题的数据
+- `--overwrite`：覆盖已存在同日期快照
+- `--no-push`：仅本地 commit，不推送远端
